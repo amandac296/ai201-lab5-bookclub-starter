@@ -117,11 +117,18 @@ def get_reading_history(user_id: str) -> list[ReadingEvent]:
 
     Returns:
         List of ReadingEvent objects ordered by finished_at descending.
+
+    The docstring says: order by finished date
+    The code does: orders by starting date instead
+    The bug is on line: 124
+    The fix is: change started_at to finished_at
+
+
     """
     return (
         ReadingEvent.query.filter_by(user_id=user_id)
         .filter(ReadingEvent.finished_at.isnot(None))
-        .order_by(ReadingEvent.started_at.desc())
+        .order_by(ReadingEvent.finished_at.desc())
         .all()
     )
 
